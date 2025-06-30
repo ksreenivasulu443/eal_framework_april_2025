@@ -1,0 +1,4 @@
+source:
+  path: "/Users/admin/PycharmProjects/taf_dec/input_files/customers.csv"
+  type: "csv"
+  schema: "N"
