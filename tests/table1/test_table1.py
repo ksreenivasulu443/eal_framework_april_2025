@@ -2,10 +2,13 @@
 #     assert True
 
 
-def test_count(read_config):
+def test_count(read_config, read_data):
     config_data = read_config
-    print("config data is", config_data, type(config_data), end='\n')
-    print("source config is", config_data['source'],end='\n')
-    print("target config is", config_data['target'],end='\n')
-    print("validation config is", config_data['validations'],end='\n')
+    source_df, target_df = read_data
+    print("source df")
+    source_df.show()
+    print(source_df.count())
+    print("target df")
+    target_df.show()
+
 

@@ -1,17 +1,21 @@
 source:
-  path: "/Users/admin/PycharmProjects/taf_dec/input_files/customers.csv"
+  path: "C:\\Users\\Admin\\PycharmProjects\\eal_framework_april_2025\\input_files\\userdata1.parquet"
+  type: "parquet"
+  schema: "N"
+  options:
+    header: None
+    delimiter: None
+    multiline : None # only for json file
+  exclude_cols: ["created_date","updated_date","hash_key","batch_id"]
+
+target:
+  path: "C:\\Users\\Admin\\PycharmProjects\\eal_framework_april_2025\\input_files\\customer_data\\customer_data_01.csv"
   type: "csv"
   schema: "N"
   options:
     header: True
     delimiter: ","
-  exclude_cols: ["created_date","updated_date","hash_key","batch_id"]
-
-target:
-  type: "database"
-  transformation : ["y","sql"]
-  table: "employees"
-  cred_lookup: "postgres"
+    multiline : None # only for json file
   exclude_cols: ["created_date","updated_date","hash_key","batch_id"]
 
 validations:

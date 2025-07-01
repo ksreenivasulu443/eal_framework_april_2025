@@ -1,4 +1,34 @@
 source:
-  path: "/Users/admin/PycharmProjects/taf_dec/input_files/customers.csv"
-  type: "csv"
+  path: "C:\\Users\\Admin\\PycharmProjects\\eal_framework_april_2025\\input_files\\userdata1.parquet"
+  type: "parquet"
   schema: "N"
+  options:
+    header: None
+    delimiter: None
+    multiline : None # only for json file
+  exclude_cols: ["created_date","updated_date","hash_key","batch_id"]
+
+target:
+  path: "C:\\Users\\Admin\\PycharmProjects\\eal_framework_april_2025\\input_files\\singleline.json"
+  type: "json"
+  schema: "N"
+  options:
+    header: None
+    delimiter: None
+    multiline : False # only for json file
+  exclude_cols: ["created_date","updated_date","hash_key","batch_id"]
+
+
+validations:
+  count_check:
+    key_columns: ("id",'customer_name')
+  duplicate_check:
+    key_columns: ["id"]
+  null_check:
+    null_columns: ["id"]
+  uniqueness_check:
+    unique_columns: ["id"]
+  data_compare_check:
+    key_column: ("id")
+    validate_columns: ["name"]
+    num_records: 100

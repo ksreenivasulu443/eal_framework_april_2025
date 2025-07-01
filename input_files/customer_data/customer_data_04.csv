@@ -1,0 +1,4 @@
+customer_id,name,email,phone,batchid
+110,Bob sreeni,bob.johnson@example.com,555-8765,20250101
+108,test name,eve.davis@example.com,555-4321,20250101
+109,Eve Davis,test@example.com,555-4321,20250101
