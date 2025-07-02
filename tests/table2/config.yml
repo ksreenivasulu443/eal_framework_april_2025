@@ -1,34 +1,29 @@
 source:
-  path: "C:\\Users\\Admin\\PycharmProjects\\eal_framework_april_2025\\input_files\\userdata1.parquet"
-  type: "parquet"
-  schema: "N"
+  path: "abfss://test@decautoadls.dfs.core.windows.net/raw/customer/"
+  type: "csv"
+  schema: "Y"
   options:
-    header: None
-    delimiter: None
-    multiline : None # only for json file
-  exclude_cols: ["created_date","updated_date","hash_key","batch_id"]
+    header: True
+    delimiter: ","
+  exclude_cols: ["created_date","updated_date","hash_key"]
 
 target:
-  path: "C:\\Users\\Admin\\PycharmProjects\\eal_framework_april_2025\\input_files\\singleline.json"
-  type: "json"
-  schema: "N"
-  options:
-    header: None
-    delimiter: None
-    multiline : False # only for json file
-  exclude_cols: ["created_date","updated_date","hash_key","batch_id"]
-
+  type: "database"
+  transformation : ["y","sql"]
+  table: "[dbo].[customers_raw]"
+  cred_lookup: "sqlserver"
+  exclude_cols: ["created_date","updated_date","hash_key","rnk"]
 
 validations:
   count_check:
-    key_columns: ("id",'customer_name')
+    key_columns: ["customer_id"]
   duplicate_check:
-    key_columns: ["id"]
+    key_columns: ["customer_id"]
   null_check:
-    null_columns: ["id"]
+    null_columns: ["customer_id","name", "email", "phone"]
   uniqueness_check:
-    unique_columns: ["id"]
+    unique_columns: ["customer_id"]
   data_compare_check:
-    key_column: ("id")
-    validate_columns: ["name"]
+    key_column: ["customer_id"]
+    validate_columns: ["na"]
     num_records: 100
