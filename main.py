@@ -4,31 +4,37 @@ import yaml
 import json
 from pyspark.sql.types import StructType
 # Create SparkSession
-spark = SparkSession.builder \
-      .master("local[1]") \
-      .appName("SparkByExamples.com") \
-      .getOrCreate()
 
-
-df = spark.read.csv("C:\\Users\\Admin\\PycharmProjects\\eal_framework_april_2025\\input_files\\Contact_info.csv", header=True, sep=',', inferSchema=True)
-
-df.show()
-
-df.printSchema()
-
-print(df.schema.json())
+path = os.path.abspath(__file__)
 #
-# with open("C:\\Users\\Admin\\PycharmProjects\\eal_framework_april_2025\\input_files\\customer_data\\customer_data_schema.json", 'r') as schema_file:
-#       schema = StructType.fromJson(json.load(schema_file))
-#
-# print("Schema is", schema)
+print(path)
 
+path_dir = os.path.dirname(os.path.abspath(__file__))
+print(path_dir)
 
+path_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+print(path_dir)
+
+path_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+print(path_dir)
+# #
+# #
+# jar_path = "C:\\Users\\Admin\\PycharmProjects\\eal_framework_april_2025\\jars\\mssql-jdbc-12.2.0.jre8.jar"
 #
+# spark = SparkSession.builder \
+#       .master("local[1]") \
+#       .appName("Automation") \
+#       .config("spark.jars", jar_path) \
+#       .config("spark.driver.extraClassPath", jar_path) \
+#       .config("spark.executor.extraClassPath", jar_path) \
+#       .getOrCreate()
 #
-# print("df with schema")
-# df_with_schema = spark.read.schema(schema).csv("C:\\Users\\Admin\\PycharmProjects\\eal_framework_april_2025\\input_files\\customer_data\\customer_data_04.csv", header=False, sep=',')
+df = spark.read.format("jdbc"). \
+      option("url", "jdbc:sqlserver://decautoserver.database.windows.net:1433;database=decauto"). \
+      option("user", 'decadmin'). \
+      option("password", "Dharmavaram1@"). \
+      option("query", "SELECT *  FROM [dbo].[customers_raw]"). \
+      option("driver", "com.microsoft.sqlserver.jdbc.SQLServerDriver").load()
 #
-# df_with_schema.show()
+# df.show()
 #
-# df_with_schema.printSchema()

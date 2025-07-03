@@ -9,7 +9,15 @@ from pyspark.sql.types import StructType
 
 @pytest.fixture(scope="session")
 def spark_session():
-    spark = SparkSession.builder.master("local[1]").appName("Automation").getOrCreate()
+    eal_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    jar_path = os.path.join(eal_path, "jars", "mssql-jdbc-12.2.0.jre8.jar")
+    spark = SparkSession.builder \
+        .master("local[1]") \
+        .appName("Automation") \
+        .config("spark.jars", jar_path) \
+        .config("spark.driver.extraClassPath", jar_path) \
+        .config("spark.executor.extraClassPath", jar_path) \
+        .getOrCreate()
     return spark
 
 
@@ -25,6 +33,7 @@ def read_config(request):
     print("==" * 100)
     return config_data
 
+
 def read_query(dir_path):
     sql_query_path = os.path.join(dir_path, "transformation.sql")
     with open(sql_query_path, "r") as file:
@@ -32,14 +41,23 @@ def read_query(dir_path):
     return sql_query
 
 
+def load_credentials(env="qa"):
+    """Load credentials from the centralized YAML file."""
+    eal_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    secrets_file_path = os.path.join(eal_path, "project_config", "secrets.yml")
+    with open(secrets_file_path, "r") as file:
+        credentials = yaml.safe_load(file)
+        print(credentials[env])
+    return credentials[env]
 
-def read_db(spark, config, dir_path):
-    creds = load_credentials()
-    cred_lookup = config['cred_lookup']
+
+def read_db(spark, config, dir_path, env):
+    creds = load_credentials(env=env)
+    cred_lookup = config['cred_lookup']  # sqlserver
     creds = creds[cred_lookup]
     print("creds", creds)
     if config['transformation'][0].lower() == 'y' and config['transformation'][1].lower() == 'sql':
-        sql_query= read_query(dir_path)
+        sql_query = read_query(dir_path)
         print("sql_query", sql_query)
         df = spark.read.format("jdbc"). \
             option("url", creds['url']). \
@@ -56,7 +74,6 @@ def read_db(spark, config, dir_path):
             option("dbtable", config['table']). \
             option("driver", creds['driver']).load()
     return df
-
 
 
 def read_schema(dir_path):
@@ -76,7 +93,8 @@ def read_file(spark, config, dir_path):
             df = spark.read.schema(schema).csv(config['path'], header=config['options']['header'],
                                                sep=config['options']['delimiter'])
         else:
-            df = spark.read.csv(config['path'], header=config['options']['header'], inferSchema=config['options']['inferSchema'])
+            df = spark.read.csv(config['path'], header=config['options']['header'],
+                                inferSchema=config['options']['inferSchema'])
     elif filetype == 'json':
         df = spark.read.json(path, multiLine=config['options']['multiline'])
         df = flatten(df)
@@ -91,22 +109,37 @@ def read_file(spark, config, dir_path):
 
 
 @pytest.fixture
-def read_data(read_config, spark_session, request):
+def read_data(read_config, spark_session, request, gen_env):
     config_data = read_config
     spark = spark_session
+    env= gen_env
     source_config = config_data['source']
     target_config = config_data['target']
     validations_config = config_data['validations']
     dir_path = request.node.fspath.dirname
 
     if source_config['type'] == 'database':
-        source_df = read_db()
+        source_df = read_db(spark=spark, config=source_config, dir_path=dir_path, env=env)
     else:
         source_df = read_file(spark=spark, config=source_config, dir_path=dir_path)
 
     if target_config['type'] == 'database':
-        target_df = read_db()
+        target_df = read_db(spark=spark, config=target_config, dir_path=dir_path, env=env)
     else:
         target_df = read_file(spark=spark, config=target_config, dir_path=dir_path)
 
     return source_df, target_df
+
+
+@pytest.fixture(scope='session')
+def gen_env(request):
+    return request.config.getoption("--env")
+
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--env",
+        action="store",
+        default="qa",
+        help="Environment to load credentials for (qa, dev, prod)"
+    )
