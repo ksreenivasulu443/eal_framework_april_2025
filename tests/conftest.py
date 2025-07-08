@@ -23,8 +23,8 @@ def spark_session():
 
 @pytest.fixture(scope='module')
 def read_config(request):
-    dir_path = request.node.fspath.dirname
-    config_path = os.path.join(dir_path, "config.yml")
+    dir_path = request.node.fspath.dirname #C:\Users\Admin\PycharmProjects\eal_framework_april_2025\tests\table4
+    config_path = os.path.join(dir_path, "config.yml") #C:\Users\Admin\PycharmProjects\eal_framework_april_2025\tests\table4\config.yml
     with open(config_path, 'r') as f:
         config_data = yaml.safe_load(f)
     print("==" * 100)
@@ -41,7 +41,7 @@ def read_query(dir_path):
     return sql_query
 
 
-def load_credentials(env="qa"):
+def load_credentials(env):
     """Load credentials from the centralized YAML file."""
     eal_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     secrets_file_path = os.path.join(eal_path, "project_config", "secrets.yml")
@@ -108,11 +108,11 @@ def read_file(spark, config, dir_path):
     return df
 
 
-@pytest.fixture
-def read_data(read_config, spark_session, request, gen_env):
+@pytest.fixture(scope='module')
+def read_data(read_config, spark_session, request, get_env):
     config_data = read_config
     spark = spark_session
-    env= gen_env
+    env = get_env
     source_config = config_data['source']
     target_config = config_data['target']
     validations_config = config_data['validations']
@@ -132,7 +132,7 @@ def read_data(read_config, spark_session, request, gen_env):
 
 
 @pytest.fixture(scope='session')
-def gen_env(request):
+def get_env(request):
     return request.config.getoption("--env")
 
 

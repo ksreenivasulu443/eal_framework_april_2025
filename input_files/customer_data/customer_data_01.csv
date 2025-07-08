@@ -1,5 +1,5 @@
-customer id,name,email,phone,batch id
-101,John Smith,john.smith@example.com,555-1234,20241230
-102,Alice Brown,alice.brown@example.com,555-5678,20241230
-103,Bob Johnson,bob.johnson@example.com,555-8765,20241230
-104,Eve Davis,eve.davis@example.com,555-4321,20241230
+customer_id,name,email,phone,batch id
+1,John Smith,john.smith@example.com,555-1234,20241230
+2,Alice Brown,alice.brown@example.com,555-5678,20241230
+3,Bob Johnson,bob.johnson@example.com,555-8765,20241230
+4,Eve Davis,eve.davis@example.com,555-4321,20241230

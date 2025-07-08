@@ -1,6 +1,7 @@
 from pyspark.sql.functions import explode, explode_outer, upper, lower, instr, lead, lag, substring, length, col
 
 from pyspark.sql.types import *
+import os
 
 
 def flatten(df):
@@ -29,3 +30,11 @@ def flatten(df):
                                for field in df.schema.fields
                                if type(field.dataType) == ArrayType or type(field.dataType) == StructType])
     return df
+
+
+
+def read_query(dir_path):
+    sql_query_path = os.path.join(dir_path, "transformation.sql")
+    with open(sql_query_path, "r") as file:
+        sql_query = file.read()
+    return sql_query
