@@ -10,7 +10,7 @@ source:
   exclude_cols: ["created_date","updated_date","hash_key","batch_id"]
 
 target:
-  path: "C:\\Users\\Admin\\PycharmProjects\\eal_framework_april_2025\\input_files\\customer_data\\customer_data_02.csv"
+  path: "C:\\Users\\Admin\\PycharmProjects\\eal_framework_april_2025\\input_files\\customer_data\\customer_data_03.csv"
   type: "csv"
   schema: "N"
   options:
@@ -30,6 +30,5 @@ validations:
   uniqueness_check:
     unique_columns: ["customer_id","email"]
   data_compare_check:
-    key_column: ("id")
-    validate_columns: ["name"]
+    key_column: ["customer_id"]
     num_records: 100

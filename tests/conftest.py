@@ -110,6 +110,7 @@ def read_file(spark, config, dir_path):
 
 @pytest.fixture(scope='module')
 def read_data(read_config, spark_session, request, get_env):
+    #print(" read_data read_dataread_data hello hello hello hello hello hello hello hello read_data read_data read_data")
     config_data = read_config
     spark = spark_session
     env = get_env
