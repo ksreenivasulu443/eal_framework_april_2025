@@ -10,25 +10,21 @@ source:
   exclude_cols: ["created_date","updated_date","hash_key","batch_id"]
 
 target:
-  path: "C:\\Users\\Admin\\PycharmProjects\\eal_framework_april_2025\\input_files\\customer_data\\customer_data_03.csv"
-  type: "csv"
-  schema: "N"
-  options:
-    header: True
-    delimiter: ","
-    multiline : None # only for json file
-    inferSchema: False
-  exclude_cols: ["created_date","updated_date","hash_key","batch_id"]
+  type: "database"
+  transformation : ["N","sql"]
+  table: "[dbo].[customers]"
+  cred_lookup: "sqlserver_prod"
+  exclude_cols: ["created_date","updated_date","hash_key","rnk"]
 
 validations:
   count_check:
     key_columns: ["customer_id"]
   duplicate_check:
-    key_columns: ["customer_id","email"]
+    key_columns: ["customer_id"]
   null_check:
-    null_columns: ["customer_id","email"]
+    null_columns: ["customer_id"]
   uniqueness_check:
-    unique_columns: ["customer_id","email"]
+    unique_columns: ["customer_id"]
   data_compare_check:
     key_column: ["customer_id"]
     num_records: 100

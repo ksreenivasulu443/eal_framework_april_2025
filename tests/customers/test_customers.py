@@ -9,10 +9,8 @@ from src.data_validations.schema_check import schema_check
 def test_count(read_data, read_config):
     source_df, target_df = read_data
     config = read_config
-
     key_columns = config['validations']['count_check']['key_columns']
     status = count_val(source=source_df, target=target_df, key_columns=key_columns)
-
     assert status == 'PASS'
 
 

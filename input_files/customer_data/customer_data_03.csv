@@ -1,4 +1,4 @@
-customer_id,name,email,phone,batch id
+customer_id,name,email,phone,batch_id
 1,John Smith,john.smith@example.com,555-1234,20241230
 2,Alice Brown,alice.brown@example.com,7777-5678,20241230
 4,eve devis,eve.davis@example.com,555-4321,20241230

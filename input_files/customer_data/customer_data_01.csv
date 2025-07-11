@@ -1,5 +1,6 @@
-customer_id,name,email,phone,batch id
-1,John Smith,john.smith@example.com,555-1234,20241230
-2,Alice Brown,alice.brown@example.com,555-5678,20241230
-3,Bob Johnson,bob.johnson@example.com,555-8765,20241230
-4,Eve Davis,eve.davis@example.com,555-4321,20241230
+customer_id,name,email,phone,batch_id
+CUST001,Alice Johnson,alice.johnson@example.com,1234567890,BATCH202501
+CUST002,Bob Smith,bob.smith@example.com,9876543210,BATCH202501
+CUST003,Charlie Brown,charlie.brown@example.com,5556667777,BATCH202502
+CUST004,Diana Prince,diana.prince@example.com,4445556666,BATCH202502
+CUST005,Ethan Hunt,ethan.hunt@example.com,3332221111,BATCH202503
