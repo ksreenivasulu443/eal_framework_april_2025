@@ -1,0 +1,31 @@
+source:
+  path: "C:\\Users\\Admin\\PycharmProjects\\eal_framework_april_2025\\input_files\\customer_data\\customer_data_01.csv"
+  type: "csv"
+  schema: "N"
+  options:
+    header: True
+    delimiter: ","
+    multiline : None # only for json file
+    inferSchema: False
+  exclude_cols: ["created_date","updated_date","hash_key","batch_id"]
+
+target:
+  type: "database"
+  transformation : ["Y","sql"]
+  table: "[dbo].[transaction_dim1]"
+  cred_lookup: "sqlserver_prod"
+  exclude_cols: ["created_date","updated_date","hash_key","rnk"]
+
+validations:
+  count_check:
+    key_columns: ["customer_id"]
+  duplicate_check:
+    key_columns: ["id"]
+  null_check:
+    null_columns: ["id"]
+  uniqueness_check:
+    unique_columns: ["id"]
+  data_compare_check:
+    key_column: ("id")
+    validate_columns: ["name"]
+    num_records: 100

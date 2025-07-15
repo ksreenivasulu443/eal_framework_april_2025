@@ -5,6 +5,7 @@ import os
 from src.utility.general_utility import flatten
 import json
 from pyspark.sql.types import StructType
+import subprocess
 
 
 @pytest.fixture(scope="session")
@@ -105,6 +106,10 @@ def read_file(spark, config, dir_path):
     elif filetype == 'txt':
         df = spark.read.csv(path, sep=config['options']['delimiter'], header=config['options']['header'])
 
+    if config['transformation'] == 'Y':
+        df.createOrReplaceTempView('df')
+        sql_query = read_query(dir_path)
+        df = spark.sql(sql_query)
     return df
 
 
@@ -118,6 +123,11 @@ def read_data(read_config, spark_session, request, get_env):
     target_config = config_data['target']
     validations_config = config_data['validations']
     dir_path = request.node.fspath.dirname
+
+    if source_config['transformation'][1].lower() == 'python' and source_config['transformation'][0].lower() == 'y':
+        python_file_path = dir_path + '/transformation.py'
+        print("python file name", python_file_path)
+        subprocess.run(["python", python_file_path])
 
     if source_config['type'] == 'database':
         source_df = read_db(spark=spark, config=source_config, dir_path=dir_path, env=env)

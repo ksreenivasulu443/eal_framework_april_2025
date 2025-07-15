@@ -1,0 +1,1 @@
+select * from df where id % 2 = 1
